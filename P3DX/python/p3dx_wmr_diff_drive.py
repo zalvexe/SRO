@@ -12,7 +12,6 @@ sim.startSimulation()
 print("Simulation Started")
 sim.addLog(1, "Python is tracking velocities...")
 
-#ambil Handle Motor sesuai hierarchy di CoppeliaSim
 p3dx_RW = sim.getObject("/PioneerP3DX/rightMotor")
 p3dx_LW = sim.getObject("/PioneerP3DX/leftMotor")
 
@@ -28,39 +27,30 @@ vx_data = []
 wx_data = []
 
 try:
-    #main Loop (dijalankan 20 detik agar robot sempat belok menghindari tembok)
     start_time = time.time()
     while (time.time() - start_time) < 20:
         current_time = time.time() - start_time
         
-        # Ambil nilai kecepatan joint
-        # Catatan: Slide menggunakan getJointTargetVelocity, tapi untuk 
-        # membaca kecepatan putaran fisik yang aktual, getJointVelocity lebih akurat.
         wr_vel = sim.getJointVelocity(p3dx_RW)
         wl_vel = sim.getJointVelocity(p3dx_LW)
         
-        # Hitung Body Velocity dengan Kinematika Differential Drive standar
+        #hitung Body Velocity dengan Kinematika Differential Drive standar
         vx = (wr_vel + wl_vel) * rw / 2 
         wx = (wr_vel - wl_vel) * rw / (2 * rb) 
         
-        # Tampilkan log di status bar CoppeliaSim
         sim.addLog(1, f"RW:{wr_vel:.1f}, LW:{wl_vel:.1f} | Vx:{vx:.1f}m/s, Wx:{wx:.1f}rad/s")
         
-        # Simpan data ke array
         t_data.append(current_time)
         wr_data.append(wr_vel)
         wl_data.append(wl_vel)
         vx_data.append(vx)
         wx_data.append(wx)
         
-        time.sleep(0.05) # Sampling rate
+        time.sleep(0.05) 
 
 finally:
-    # 5. Stop Simulation safely
     sim.stopSimulation()
     print("\nSimulation Stopped")
-
-# --- ASSIGNMENT PLOTTING ---
 
 # Plot 1: Temporal plot of P3DX joint velocity
 plt.figure(figsize=(10, 5))
@@ -71,7 +61,7 @@ plt.xlabel('Time (sec)')
 plt.ylabel('Angular Velocity (rad/s)')
 plt.legend()
 plt.grid(True)
-plt.savefig('joint_velocity.png') # Otomatis save gambar untuk dilampirkan ke PDF
+plt.savefig('joint_velocity.png')
 plt.show()
 
 # Plot 2: Temporal plot of P3DX body velocity
