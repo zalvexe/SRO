@@ -113,11 +113,10 @@ try:
         
 
 finally:
-    # 5. Stop Simulation safely
     sim.stopSimulation()
     print("\nSimulation Stopped")
 
-# --- ASSIGNMENT PLOTTING ---
+# --- PLOTTING ---
 plt.figure(figsize=(10, 5))
 plt.plot(x_odom_abs, y_odom_abs, 'b-', label='Odometry Path (Absolute)', color='purple')
 plt.plot(x_odom_intg, y_odom_intg, 'r-', label='Odometry Path (Integrated)', color='blue')
